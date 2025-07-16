@@ -60,7 +60,7 @@ export class AuthService {
     if (this.socket) {
       this.socket.disconnect();
     }
-    this.router.navigate(['/ogin']);
+    this.router.navigate(['/login']);
   }
   private loadToken(): void {
     this.token = localStorage.getItem('token');
