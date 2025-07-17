@@ -17,6 +17,10 @@ const addContact = async (req, res) => {
       note,
     });
     const contact = await newContact.save();
+    const io = req.app.get("socketIO");
+    if (io) {
+      io.emit("newContactAdded", contact);
+    }
     res.status(201).json(contact);
   } catch (err) {
     console.log(err.message);
@@ -91,6 +95,10 @@ const editContact = async (req, res) => {
     contact.lockedAt = null;
 
     await contact.save();
+    const io = req.app.get("socketIO");
+    if (io) {
+      io.emit("editedContact", contact);
+    }
     res.json(contact);
   } catch (err) {
     console.log(err.message);

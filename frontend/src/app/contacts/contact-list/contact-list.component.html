@@ -1,1 +1,208 @@
-<p>contact-list works!</p>
+<div class="container">
+  <mat-card class="add-contact-card">
+    <mat-card-header>
+      <mat-card-title>Add New Contact</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <app-contact-form
+        (saveContact)="onAddContactSubmit($event)"
+        [contact]="null"
+      ></app-contact-form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="filter-card">
+    <mat-card-header>
+      <mat-card-title>Filter Contacts</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="filterForm">
+        <mat-form-field appearance="fill" class="filter-field">
+          <mat-label>Filter by Name</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="filter-field">
+          <mat-label>Filter by Phone</mat-label>
+          <input matInput formControlName="phone" />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="filter-field">
+          <mat-label>Filter by Address</mat-label>
+          <input matInput formControlName="address" />
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="contact-list-card">
+    <mat-card-header>
+      <mat-card-title>Contact List</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="editingContactId !== contact._id">{{
+                contact.name
+              }}</span>
+              <mat-form-field
+                *ngIf="editingContactId === contact._id"
+                appearance="fill"
+              >
+                <input
+                  matInput
+                  [(ngModel)]="contact.name"
+                  name="editName"
+                  required
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="editingContactId !== contact._id">{{
+                contact.phone
+              }}</span>
+              <mat-form-field
+                *ngIf="editingContactId === contact._id"
+                appearance="fill"
+              >
+                <input
+                  matInput
+                  [(ngModel)]="contact.phone"
+                  name="editPhone"
+                  required
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Address</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="editingContactId !== contact._id">{{
+                contact.address
+              }}</span>
+              <mat-form-field
+                *ngIf="editingContactId === contact._id"
+                appearance="fill"
+              >
+                <input
+                  matInput
+                  [(ngModel)]="contact.address"
+                  name="editAddress"
+                />
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="note">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Note</th>
+            <td mat-cell *matCellDef="let contact">
+              <span *ngIf="editingContactId !== contact._id">{{
+                contact.note
+              }}</span>
+              <mat-form-field
+                *ngIf="editingContactId === contact._id"
+                appearance="fill"
+              >
+                <textarea
+                  matInput
+                  [(ngModel)]="contact.note"
+                  name="editNote"
+                ></textarea>
+              </mat-form-field>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let contact">
+              <span
+                *ngIf="isLockedByAnotherUser(contact)"
+                class="locked-status"
+              >
+                <mat-icon color="warn">lock</mat-icon> Locked by
+                {{ getLockerUsername(contact) }}
+              </span>
+              <span
+                *ngIf="
+                  editingContactId === contact._id &&
+                  !isLockedByAnotherUser(contact)
+                "
+                class="editing-status"
+              >
+                <mat-icon color="accent">edit</mat-icon> Editing
+              </span>
+              <span
+                *ngIf="
+                  !isLockedByAnotherUser(contact) &&
+                  editingContactId !== contact._id
+                "
+                class="available-status"
+              >
+                Available
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let contact">
+              <ng-container *ngIf="editingContactId !== contact._id">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="startEditing(contact)"
+                  [disabled]="isLockedByAnotherUser(contact)"
+                >
+                  <mat-icon>edit</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="deleteContact(contact._id)"
+                  [disabled]="isLockedByAnotherUser(contact)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="editingContactId === contact._id">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="onSaveEdit(contact)"
+                >
+                  <mat-icon>save</mat-icon>
+                </button>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="onCancelEdit(contact)"
+                >
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [length]="totalContacts"
+          [pageSize]="pageSize"
+          [pageIndex]="currentPage - 1"
+          [pageSizeOptions]="[5]"
+          (page)="onPageChange($event)"
+          showFirstLastButtons
+        >
+        </mat-paginator>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

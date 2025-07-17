@@ -1,0 +1,33 @@
+.contact-form-card {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form-card mat-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.contact-form-card mat-card-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.contact-form-card mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.form-actions button {
+  padding: 10px 20px;
+  font-size: 16px;
+}

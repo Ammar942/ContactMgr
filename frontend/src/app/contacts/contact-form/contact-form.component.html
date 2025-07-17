@@ -1,1 +1,91 @@
-<p>contact-form works!</p>
+<mat-card class="contact-form-card">
+  <mat-card-header>
+    <mat-card-title>{{
+      isEditMode ? "Edit Contact" : "Add New Contact"
+    }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="contactForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required />
+
+        <mat-error
+          *ngIf="
+            contactForm.get('name')?.hasError('required') &&
+            contactForm.get('name')?.touched
+          "
+        >
+          Name is required
+        </mat-error>
+        <mat-error
+          *ngIf="
+            contactForm.get('name')?.hasError('pattern') &&
+            contactForm.get('name')?.touched
+          "
+        >
+          Only letters and spaces allowed.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Phone</mat-label>
+        <input matInput formControlName="phone" required />
+        <mat-error
+          *ngIf="
+            contactForm.get('phone')?.hasError('required') &&
+            contactForm.get('phone')?.touched
+          "
+        >
+          Phone is required
+        </mat-error>
+        <mat-error
+          *ngIf="
+            contactForm.get('phone')?.hasError('pattern') &&
+            contactForm.get('phone')?.touched
+          "
+        >
+          Only numbers allowed.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Address</mat-label>
+        <input matInput formControlName="address" required />
+        <mat-error
+          *ngIf="
+            contactForm.get('address')?.hasError('required') &&
+            contactForm.get('address')?.touched
+          "
+        >
+          Address is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Notes</mat-label>
+        <textarea matInput formControlName="note"></textarea>
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="contactForm.invalid"
+        >
+          {{ isEditMode ? "Save Changes" : "Add Contact" }}
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="onCancel()"
+          *ngIf="isEditMode"
+        >
+          Cancel
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

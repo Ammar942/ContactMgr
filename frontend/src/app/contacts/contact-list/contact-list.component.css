@@ -1,0 +1,54 @@
+.spacer {
+  flex: 1 1 auto;
+}
+
+.container {
+  padding: 20px;
+}
+
+.add-contact-card,
+.filter-card,
+.contact-list-card {
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-card mat-card-content form {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-card .filter-field {
+  flex: 1 1 calc(33% - 20px); /* Adjust as needed for responsiveness */
+  min-width: 200px;
+}
+
+.contact-list-card table {
+  width: 100%;
+}
+
+.contact-list-card .mat-form-field {
+  width: 100%;
+}
+
+.locked-status {
+  color: #f44336; /* Red */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.editing-status {
+  color: #ffc107; /* Amber */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.available-status {
+  color: #4caf50; /* Green */
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
