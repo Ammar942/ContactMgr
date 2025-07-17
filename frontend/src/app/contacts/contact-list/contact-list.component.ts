@@ -329,6 +329,21 @@ export class ContactListComponent implements OnInit, OnDestroy {
             this.dataSource.data = data;
           }
         });
+      fromEvent(this.authService.socket, 'deleteContact')
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((deletedContact: Contact) => {
+          this.snackBar.open(
+            `Contact deleted: ${deletedContact.name}`,
+            'Close',
+            {
+              duration: 3000,
+            }
+          );
+
+          let data = [...this.dataSource.data];
+          data = data.filter((c) => c._id !== deletedContact._id);
+          this.dataSource.data = data;
+        });
     }
   }
 

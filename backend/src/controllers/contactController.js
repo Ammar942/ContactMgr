@@ -117,6 +117,10 @@ const deleteContact = async (req, res) => {
     if (!contact) {
       return res.status(400).json({ message: "No contact found" });
     }
+    const io = req.app.get("socketIO");
+    if (io) {
+      io.emit("deleteContact", contact);
+    }
     await Contact.deleteOne({ _id: id });
     res.json({ message: "Contact Deleted" });
   } catch (err) {
