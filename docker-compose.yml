@@ -1,0 +1,21 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: backend
+    ports:
+      - "5000:5000"
+    environment:
+      MONGO_URI: mongodb+srv://ammar:ammar@cluster0.ixqho6f.mongodb.net/
+      JWT_SECRET: supersecretjwtkey
+    depends_on:
+      - frontend
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
