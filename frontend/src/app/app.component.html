@@ -1,4 +1,8 @@
-<mat-toolbar color="primary" *ngIf="authService.isAuthenticated$ | async">
+<mat-toolbar
+  class="header"
+  color="primary"
+  *ngIf="authService.isAuthenticated$ | async"
+>
   <span>{{ title }}</span>
   <span class="spacer"></span>
   <button mat-button (click)="logout()">Logout</button>

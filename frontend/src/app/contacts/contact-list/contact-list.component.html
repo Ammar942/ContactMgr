@@ -109,11 +109,7 @@
                 *ngIf="editingContactId === contact._id"
                 appearance="fill"
               >
-                <textarea
-                  matInput
-                  [(ngModel)]="contact.note"
-                  name="editNote"
-                ></textarea>
+                <input matInput [(ngModel)]="contact.note" name="editNote" />
               </mat-form-field>
             </td>
           </ng-container>

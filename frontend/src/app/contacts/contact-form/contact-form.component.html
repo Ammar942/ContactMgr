@@ -62,9 +62,9 @@
         </mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
+      <mat-form-field appearance="fill" *ngIf="!isEditMode">
         <mat-label>Notes</mat-label>
-        <textarea matInput formControlName="note"></textarea>
+        <textarea matInput formControlName="note" rows="3"></textarea>
       </mat-form-field>
 
       <div class="form-actions">

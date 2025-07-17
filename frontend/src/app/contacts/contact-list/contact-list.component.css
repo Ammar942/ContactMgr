@@ -33,21 +33,21 @@
 }
 
 .locked-status {
-  color: #f44336; /* Red */
+  color: #f44336;
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
 .editing-status {
-  color: #ffc107; /* Amber */
+  color: #ffc107;
   display: flex;
   align-items: center;
   gap: 5px;
 }
 
 .available-status {
-  color: #4caf50; /* Green */
+  color: #4caf50;
   display: flex;
   align-items: center;
   gap: 5px;
