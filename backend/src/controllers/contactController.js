@@ -17,6 +17,10 @@ const addContact = async (req, res) => {
       note,
     });
     const contact = await newContact.save();
+    const io = req.app.get("socketIO");
+    if (io) {
+      io.emit("newContactAdded", contact);
+    }
     res.status(201).json(contact);
   } catch (err) {
     console.log(err.message);
@@ -91,6 +95,10 @@ const editContact = async (req, res) => {
     contact.lockedAt = null;
 
     await contact.save();
+    const io = req.app.get("socketIO");
+    if (io) {
+      io.emit("editedContact", contact);
+    }
     res.json(contact);
   } catch (err) {
     console.log(err.message);
@@ -108,6 +116,10 @@ const deleteContact = async (req, res) => {
     const contact = await Contact.findById(id);
     if (!contact) {
       return res.status(400).json({ message: "No contact found" });
+    }
+    const io = req.app.get("socketIO");
+    if (io) {
+      io.emit("deleteContact", contact);
     }
     await Contact.deleteOne({ _id: id });
     res.json({ message: "Contact Deleted" });
